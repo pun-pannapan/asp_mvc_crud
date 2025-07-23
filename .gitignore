@@ -18,8 +18,8 @@ obj/
 # Environment config
 .env
 *.secret
-# appsettings.json
-# appsettings.*.json
+appsettings.json
+appsettings.*.json
 
 # Node & web assets
 node_modules/
