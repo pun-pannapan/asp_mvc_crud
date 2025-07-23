@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+
+# User-specific files
+.vs/
+*.user
+*.suo
+
+# Logs
+*.log
+
+# Database
+*.mdf
+*.ldf
+*.db
+
+# Environment config
+.env
+*.secret
+# appsettings.json
+# appsettings.*.json
+
+# Node & web assets
+node_modules/
+wwwroot/lib/
+bower_components/
+
+# Rider / JetBrains
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# EF Core
+**/Migrations/*.Designer.cs
+**/Migrations/*Snapshot.cs
