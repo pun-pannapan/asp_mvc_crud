@@ -1,0 +1,74 @@
+﻿@model IEnumerable<asp_mvc_crud.Models.Borrowing>
+
+@{
+    ViewData["Title"] = "Borrowings";
+}
+
+<h1>Borrowings</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New Borrowing</a>
+    <a asp-action="Overdue" class="btn btn-warning">View Overdue</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Member</th>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Borrow Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Fine Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.IsOverdue ? "table-warning" : "")">
+                    <td>@Html.DisplayFor(modelItem => item.Member.FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Book.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Book.Author.FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BorrowDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DueDate)</td>
+                    <td>
+                        @if (item.ReturnDate.HasValue)
+                        {
+                            @Html.DisplayFor(modelItem => item.ReturnDate)
+                        }
+                        else
+                        {
+                            <span class="text-muted">Not returned</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge bg-@(item.Status == "Returned" ? "success" : item.IsOverdue ? "danger" : "primary")">
+                            @(item.IsOverdue && item.Status == "Borrowed" ? "Overdue" : item.Status)
+                        </span>
+                    </td>
+                    <td>
+                        @if (item.FineAmount > 0)
+                        {
+                            <span class="text-danger">@item.FineAmount.ToString("C")</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!item.ReturnDate.HasValue)
+                        {
+                            <a asp-action="Return" asp-route-id="@item.BorrowingId" class="btn btn-sm btn-success">Return</a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.BorrowingId" class="btn btn-sm btn-outline-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,42 @@
+﻿@model asp_mvc_crud.Models.Borrowing
+
+@{
+    ViewData["Title"] = "Return Book";
+}
+
+<h1>Return Book</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Book.Title</h5>
+        <p class="card-text">
+            <strong>Member:</strong> @Model.Member.FullName<br>
+            <strong>Author:</strong> @Model.Book.Author.FullName<br>
+            <strong>Borrowed:</strong> @Model.BorrowDate.ToString("dd/MM/yyyy")<br>
+            <strong>Due Date:</strong> @Model.DueDate.ToString("dd/MM/yyyy")<br>
+            <strong>Days Borrowed:</strong> @((DateTime.Now - Model.BorrowDate).Days) days
+        </p>
+
+        @if (Model.IsOverdue)
+        {
+            <div class="alert alert-warning">
+                <strong>Overdue!</strong> This book is @Model.DaysOverdue days overdue.
+                <br><strong>Fine Amount:</strong> @ViewBag.PotentialFine.ToString("C")
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success">
+                This book is being returned on time. No fine applicable.
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="ReturnConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.BorrowingId" />
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Confirm Return</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

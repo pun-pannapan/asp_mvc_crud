@@ -1,0 +1,57 @@
+﻿@model IEnumerable<asp_mvc_crud.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1>Books</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Book</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.Author)</th>
+                <th>@Html.DisplayNameFor(model => model.Category)</th>
+                <th>@Html.DisplayNameFor(model => model.ISBN)</th>
+                <th>@Html.DisplayNameFor(model => model.PublicationYear)</th>
+                <th>Total Copies</th>
+                <th>Available</th>
+                <th>@Html.DisplayNameFor(model => model.Status)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Author.FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Category.CategoryName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ISBN)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PublicationYear)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalCopies)</td>
+                    <td>
+                        <span class="badge bg-@(item.AvailableCopies > 0 ? "success" : "danger")">
+                            @Html.DisplayFor(modelItem => item.AvailableCopies)
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-@(item.Status == "Available" ? "success" : item.Status == "Maintenance" ? "warning" : "danger")">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

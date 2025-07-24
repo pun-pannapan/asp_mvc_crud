@@ -2,6 +2,8 @@ using asp_mvc_crud.Data;
 using asp_mvc_crud.Models;
 using asp_mvc_crud.Repositories.Implementations;
 using asp_mvc_crud.Repositories.Interfaces;
+using asp_mvc_crud.Services;
+using asp_mvc_crud.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,11 @@ builder.Services.AddScoped<ILibraryRepository<Author>, LibraryRepository<Author>
 builder.Services.AddScoped<ILibraryRepository<Category>, LibraryRepository<Category>>();
 builder.Services.AddScoped<ILibraryRepository<Book>, LibraryRepository<Book>>();
 builder.Services.AddScoped<ILibraryRepository<Borrowing>, LibraryRepository<Borrowing>>();
+
+// Register Services
+builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowingService, BorrowingService>();
 
 // Register Specific Repositories
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
