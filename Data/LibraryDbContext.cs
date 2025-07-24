@@ -87,9 +87,9 @@ namespace asp_mvc_crud.Data
 
             // Seed Members
             modelBuilder.Entity<Member>().HasData(
-                new Member { MemberId = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@email.com", Phone = "081-234-5678", JoinDate = DateTime.Now.AddMonths(-6) },
-                new Member { MemberId = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@email.com", Phone = "081-876-5432", JoinDate = DateTime.Now.AddMonths(-3) },
-                new Member { MemberId = 3, FirstName = "Mike", LastName = "Johnson", Email = "mike.j@email.com", JoinDate = DateTime.Now.AddMonths(-1) }
+                new Member { MemberId = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@email.com", Phone = "081-234-5678", JoinDate = new DateTime(2025, 1, 5) },
+                new Member { MemberId = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@email.com", Phone = "081-876-5432", JoinDate = new DateTime(2025, 3, 5) },
+                new Member { MemberId = 3, FirstName = "Mike", LastName = "Johnson", Email = "mike.j@email.com", JoinDate = new DateTime(2025, 5, 5) }
             );
         }
     }
