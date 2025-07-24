@@ -1,6 +1,5 @@
 using asp_mvc_crud.Data;
 using asp_mvc_crud.Models;
-using asp_mvc_crud.Repositories;
 using asp_mvc_crud.Repositories.Implementations;
 using asp_mvc_crud.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

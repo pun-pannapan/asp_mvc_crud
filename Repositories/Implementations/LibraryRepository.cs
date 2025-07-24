@@ -2,7 +2,7 @@
 using asp_mvc_crud.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace asp_mvc_crud.Repositories
+namespace asp_mvc_crud.Repositories.Implementations
 {
     public class LibraryRepository<T> : ILibraryRepository<T> where T : class
     {
