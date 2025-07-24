@@ -38,7 +38,16 @@
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.MemberId" class="btn btn-sm btn-outline-primary">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.MemberId" class="btn btn-sm btn-outline-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-sm btn-outline-danger">Delete</a>
+                        @* <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-sm btn-outline-danger">Delete</a> *@
+                        <form asp-action="Delete"
+                              asp-route-id="@item.MemberId"
+                              method="post"
+                              asp-antiforgery="true"
+                              class="d-inline"
+                              onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบสมาชิกนี้?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+
                     </td>
                 </tr>
             }

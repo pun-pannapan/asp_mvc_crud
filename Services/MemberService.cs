@@ -53,7 +53,7 @@ namespace asp_mvc_crud.Services
         public async Task<bool> IsEmailExistsAsync(string email, int? excludeId = null)
         {
             var member = await _memberRepository.GetByEmailAsync(email);
-            return member != null && (excludeId == null || member.MemberId != excludeId);
+            return member != null && (excludeId != null && member.MemberId == excludeId);
         }
     }
 }

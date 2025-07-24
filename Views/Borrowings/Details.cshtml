@@ -1,0 +1,142 @@
+﻿@model asp_mvc_crud.Models.Borrowing
+
+@{
+    ViewData["Title"] = "Borrowing Details";
+}
+
+<h1>Borrowing Details</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Borrowing #@Model.BorrowingId</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Member</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Member.FullName)</dd>
+
+                            <dt class="col-sm-4">Email</dt>
+                            <dd class="col-sm-8">
+                                <a href="mailto:@Model.Member.Email">@Html.DisplayFor(model => model.Member.Email)</a>
+                            </dd>
+
+                            <dt class="col-sm-4">Phone</dt>
+                            <dd class="col-sm-8">
+                                @if (!string.IsNullOrEmpty(Model.Member.Phone))
+                                {
+                                    <a href="tel:@Model.Member.Phone">@Html.DisplayFor(model => model.Member.Phone)</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-4">Book</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Book.Title)</dd>
+
+                            <dt class="col-sm-4">Author</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Book.Author.FullName)</dd>
+
+                            <dt class="col-sm-4">ISBN</dt>
+                            <dd class="col-sm-8">
+                                @if (!string.IsNullOrEmpty(Model.Book.ISBN))
+                                {
+                                    <code>@Html.DisplayFor(model => model.Book.ISBN)</code>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.BorrowDate)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.BorrowDate)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DueDate)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.DueDate)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ReturnDate)</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.ReturnDate.HasValue)
+                                {
+                                    @Html.DisplayFor(model => model.ReturnDate)
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not returned yet</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
+                            <dd class="col-sm-8">
+                                <span class="badge bg-@(Model.Status == "Returned" ? "success" : Model.IsOverdue ? "danger" : "primary")">
+                                    @(Model.IsOverdue && Model.Status == "Borrowed" ? "Overdue" : Model.Status)
+                                </span>
+                            </dd>
+
+                            <dt class="col-sm-4">Days Borrowed</dt>
+                            <dd class="col-sm-8">
+                                @{
+                                    var endDate = Model.ReturnDate ?? DateTime.Now;
+                                    var daysBorrowed = (endDate - Model.BorrowDate).Days;
+                                }
+                                @daysBorrowed day(s)
+                            </dd>
+
+                            @if (Model.IsOverdue || Model.FineAmount > 0)
+                            {
+                                <dt class="col-sm-4">Days Overdue</dt>
+                                <dd class="col-sm-8">
+                                    <span class="text-danger">@Model.DaysOverdue day(s)</span>
+                                </dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FineAmount)</dt>
+                                <dd class="col-sm-8">
+                                    <span class="text-danger h5">@Model.FineAmount.ToString("C")</span>
+                                </dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+
+                @if (Model.IsOverdue && !Model.ReturnDate.HasValue)
+                {
+                    <div class="alert alert-warning mt-3">
+                        <h6 class="alert-heading">⚠️ Overdue Notice</h6>
+                        <p class="mb-0">This book is <strong>@Model.DaysOverdue day(s) overdue</strong>. Please return it as soon as possible.</p>
+                        <hr>
+                        <p class="mb-0">Current fine amount: <strong>@Model.FineAmount.ToString("C")</strong></p>
+                    </div>
+                }
+                else if (Model.ReturnDate.HasValue && Model.Status == "Returned")
+                {
+                    <div class="alert alert-success mt-3">
+                        <h6 class="alert-heading">✅ Book Returned</h6>
+                        <p class="mb-0">This book was successfully returned on @Model.ReturnDate.Value.ToString("dd/MM/yyyy").</p>
+                        @if (Model.FineAmount > 0)
+                        {
+                            <hr>
+                            <p class="mb-0">Fine paid: <strong>@Model.FineAmount.ToString("C")</strong></p>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="mt-3">
+            @if (!Model.ReturnDate.HasValue)
+            {
+                <a asp-action="Return" asp-route-id="@Model.BorrowingId" class="btn btn-success">Return Book</a>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

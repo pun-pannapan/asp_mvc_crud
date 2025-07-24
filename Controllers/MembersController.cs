@@ -103,15 +103,23 @@ namespace asp_mvc_crud.Controllers
             if (ModelState.IsValid)
             {
                 // Check if email already exists for other members
-                if (await _memberService.IsEmailExistsAsync(member.Email, member.MemberId))
+                var existingMember = await _memberService.GetByIdAsync(id);
+                if (existingMember is not null)
                 {
-                    ModelState.AddModelError("Email", "Email already exists");
+                    existingMember.FirstName = member.FirstName;
+                    existingMember.LastName = member.LastName;
+                    existingMember.Email = member.Email;
+                    existingMember.Phone = member.Phone;
+                    existingMember.JoinDate = member.JoinDate;
+                    existingMember.Status = member.Status;
+
+                    await _memberService.UpdateAsync(existingMember);
+                    TempData["Success"] = "Member updated successfully!";
+                    return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    await _memberService.UpdateAsync(member);
-                    TempData["Success"] = "Member updated successfully!";
-                    return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError("Email", "Email is not exists");
                 }
             }
 
@@ -125,21 +133,10 @@ namespace asp_mvc_crud.Controllers
             return View(member);
         }
 
-        // GET: Members/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var member = await _memberService.GetByIdAsync(id.Value);
-            if (member == null) return NotFound();
-
-            return View(member);
-        }
-
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _memberService.DeleteAsync(id);
             if (result)
